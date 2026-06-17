@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "myoutboundengine"
+version = "0.1.0"
+description = "Outbound email engine that drafts personalized, value-led sequences to win high-craft kitchen clients."
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "Chening" }]
+dependencies = [
+    "pydantic>=2.7",
+    "anthropic>=0.40",
+    "typer>=0.12",
+    "pandas>=2.2",
+    "pypdf>=4.2",
+    "python-docx>=1.1",
+    "python-dotenv>=1.0",
+    "email-validator>=2.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+# The `engine` CLI entry point gets wired up in the step that adds the CLI module.
+# [project.scripts]
+# engine = "outbound.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/outbound"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

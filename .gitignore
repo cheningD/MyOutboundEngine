@@ -1,0 +1,28 @@
+# Secrets
+.env
+
+# Local data: SQLite db and generated artifacts
+/data/
+*.sqlite
+*.sqlite3
+*.db
+
+# Uploaded product context (your portfolio, pricing, etc.)
+/context/*
+!/context/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
