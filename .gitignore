@@ -3,6 +3,7 @@
 
 # Local data: SQLite db and generated artifacts
 /data/
+/outputs/
 *.sqlite
 *.sqlite3
 *.db

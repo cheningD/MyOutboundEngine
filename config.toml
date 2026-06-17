@@ -1,0 +1,45 @@
+# MyOutboundEngine configuration.
+# Secrets (ANTHROPIC_API_KEY) live in .env, never here. Edit anything below to taste.
+
+# Model used for drafting and context distillation.
+# Can also be overridden by the OUTBOUND_MODEL environment variable.
+model = "claude-sonnet-4-6"
+
+[paths]
+context_dir = "context"
+data_dir = "data"
+outputs_dir = "outputs"
+db_path = "data/engine.sqlite"
+
+[sequence]
+steps = 3
+days_between = [0, 3, 6]
+tone = "warm, concrete, low-pressure; craftsmanship-led, not salesy"
+max_words_per_email = 120
+
+[icp]
+description = """
+Capital-rich clients in the US (Detroit metro a plus) commissioning a high-craft, bespoke
+kitchen. Two buyer types: affluent homeowners in the middle of a renovation, and the
+architects, interior designers, and high-end builders who specify and refer the work.
+"""
+audiences = ["homeowner", "architect", "interior_designer", "builder", "developer"]
+
+[icp.signals]
+title_keywords = ["owner", "principal", "founder", "partner", "architect", "designer", "ceo", "president"]
+industry_keywords = ["architecture", "interior design", "luxury real estate", "custom home", "residential construction", "renovation", "home builder"]
+preferred_regions = ["Detroit", "Michigan", "Midwest", "United States"]
+exclude_keywords = ["student", "intern", "wholesale", "dropshipping", "unsubscribe"]
+
+[icp.weights]
+title = 0.35
+industry = 0.35
+geography = 0.15
+seniority = 0.15
+
+[budget]
+# Dollars you're willing to spend per high-fit opportunity (custom landing page, mini-report).
+# Stays at 0 until you're ready; nothing is spent while it's 0.
+per_opportunity_usd = 0.0
+# A prospect must score at or above this fit (0-1) to be eligible for budget-funded artifacts.
+priority_tier_threshold = 0.7
