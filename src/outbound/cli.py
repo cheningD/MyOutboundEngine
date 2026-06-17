@@ -5,10 +5,14 @@ Commands are added as their modules are built. Right now: ``ingest-context``.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import typer
 
 from .config import load_settings
 from .context.ingest import ingest, read_context_files
+from .leads.csv_loader import load_leads
+from .store import Store
 
 app = typer.Typer(
     help="MyOutboundEngine - personalized outbound sequence generation.",
@@ -55,6 +59,37 @@ def ingest_context(
     typer.echo(f"  summary:      {offer.summary}")
     typer.echo(f"  value props:  {len(offer.value_props)} | proof points: {len(offer.proof_points)}")
     typer.echo(f"  saved to:     {settings.paths.data_dir / 'offer_brief.json'}")
+
+
+@app.command(name="load-leads")
+def load_leads_cmd(
+    csv_path: str = typer.Argument(..., help="Path to the leads CSV."),
+    config: str = typer.Option("config.toml", help="Path to config.toml."),
+    source: str = typer.Option("csv", help="Source label stored on each lead."),
+) -> None:
+    """Load leads from a CSV into the store as prospects (validated, deduped, merged)."""
+    settings = load_settings(config)
+    settings.paths.ensure()
+
+    path = Path(csv_path)
+    if not path.exists():
+        typer.secho(f"File not found: {path}", fg=typer.colors.RED)
+        raise typer.Exit(code=1)
+
+    store = Store(settings.paths.db_path)
+    try:
+        result = load_leads(store, path, source=source)
+    except ValueError as exc:
+        typer.secho(str(exc), fg=typer.colors.RED)
+        raise typer.Exit(code=1)
+    finally:
+        store.close()
+
+    typer.secho(result.summary(), fg=typer.colors.GREEN)
+    if result.errors:
+        typer.secho("First issues:", fg=typer.colors.YELLOW)
+        for err in result.errors[:10]:
+            typer.echo(f"  {err}")
 
 
 if __name__ == "__main__":
