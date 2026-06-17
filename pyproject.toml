@@ -23,9 +23,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.6"]
 
-# The `engine` CLI entry point gets wired up in the step that adds the CLI module.
-# [project.scripts]
-# engine = "outbound.cli:app"
+# The `engine` CLI entry point.
+[project.scripts]
+engine = "outbound.cli:app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/outbound"]
